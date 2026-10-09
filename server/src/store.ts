@@ -1,34 +1,49 @@
 import { hashPassword } from "./password.ts";
 
 export interface User {
-    id: string
-    firstName: string
-    lastName: string
-    username: string
-    email?: string
-    passwordHash: string
+  id: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email?: string;
+  passwordHash: string;
 }
 
 export interface Session {
-    id: string
-    userId: string
-    expiresAt: Date
+  id: string;
+  userId: string;
+  expiresAt: Date;
 }
 
-const userStore = new Map<string, User>()
-const sessionStore = new Map<string, Session>()
+const userStore = new Map<string, User>();
+const sessionStore = new Map<string, Session>();
 
 // seed
-const passwordHash = await hashPassword("admin_password")
+const passwordHash = await hashPassword("admin_password");
+userStore.set("admin", {
+  id: crypto.randomUUID(),
+  firstName: "George",
+  lastName: "Admin",
+  username: "admin",
+  passwordHash: passwordHash,
+});
 
-userStore.set('admin', {
+// factories
+function createUser(
+  input: Omit<User, "id">,
+): User {
+  return {
     id: crypto.randomUUID(),
-    firstName: "George",
-    lastName: "Admin",
-    username: "admin",
-    passwordHash: passwordHash,
-})
+    ...input,
+  };
+}
 
-console.log(userStore)
+function createSession(userId: string): Session {
+  return {
+    id: crypto.randomUUID(),
+    userId: userId,
+    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+  };
+}
 
-export { userStore, sessionStore }
+export { createSession, createUser, sessionStore, userStore };
