@@ -1,7 +1,7 @@
 import { Hono } from "@hono/hono";
 import { getCookie, setCookie } from "@hono/hono/cookie";
 
-import { handleLogin, handleLogout, handleProfile } from "./login.ts";
+import { handleLogin, handleLogout, handleProfile } from "./handler.ts";
 import { LoginDto } from "./dto.ts";
 
 const app = new Hono();
